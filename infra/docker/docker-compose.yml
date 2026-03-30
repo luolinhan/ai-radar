@@ -1,0 +1,128 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: ai-radar-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ai_radar}
+      POSTGRES_USER: ${POSTGRES_USER:-ai_radar}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ai_radar_password}
+    volumes:
+      - ../data/pg:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ai_radar}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: ai-radar-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - ../data/redis:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ../apps/api
+      dockerfile: Dockerfile
+    container_name: ai-radar-api
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-ai_radar}
+      POSTGRES_USER: ${POSTGRES_USER:-ai_radar}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ai_radar_password}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      AI_API_BASE_URL: ${AI_API_BASE_URL}
+      AI_API_KEY: ${AI_API_KEY}
+      AI_MODEL: ${AI_MODEL:-qwen3.5-plus}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      FEISHU_WEBHOOK_URL: ${FEISHU_WEBHOOK_URL}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ../configs:/app/configs:ro
+    restart: unless-stopped
+
+  worker-collector:
+    build:
+      context: ../apps/worker-collector
+      dockerfile: Dockerfile
+    container_name: ai-radar-collector
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-ai_radar}
+      POSTGRES_USER: ${POSTGRES_USER:-ai_radar}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ai_radar_password}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ../configs:/app/configs:ro
+    restart: unless-stopped
+
+  worker-ai:
+    build:
+      context: ../apps/worker-ai
+      dockerfile: Dockerfile
+    container_name: ai-radar-ai
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${POSTGRES_DB:-ai_radar}
+      POSTGRES_USER: ${POSTGRES_USER:-ai_radar}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ai_radar_password}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      AI_API_BASE_URL: ${AI_API_BASE_URL}
+      AI_API_KEY: ${AI_API_KEY}
+      AI_MODEL: ${AI_MODEL:-qwen3.5-plus}
+      FEISHU_WEBHOOK_URL: ${FEISHU_WEBHOOK_URL}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ../configs:/app/configs:ro
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: ../apps/dashboard
+      dockerfile: Dockerfile
+    container_name: ai-radar-dashboard
+    environment:
+      NEXT_PUBLIC_API_URL: http://${API_HOST:-localhost}:${API_PORT:-8000}
+    ports:
+      - "${DASHBOARD_PORT:-3000}:3000"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+networks:
+  default:
+    name: ai-radar-network

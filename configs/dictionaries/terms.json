@@ -1,0 +1,42 @@
+# AI行业术语词典
+# 用于翻译参考
+
+{
+  "technical_terms": {
+    "LLM": "大语言模型",
+    "NLP": "自然语言处理",
+    "fine-tuning": "微调",
+    "inference": "推理",
+    "training": "训练",
+    "benchmark": "基准测试",
+    "embedding": "嵌入",
+    "attention": "注意力机制",
+    "transformer": "Transformer",
+    "generative AI": "生成式AI",
+    "multimodal": "多模态",
+    "reinforcement learning": "强化学习",
+    "deep learning": "深度学习",
+    "neural network": "神经网络"
+  },
+  "companies": {
+    "OpenAI": "OpenAI",
+    "Anthropic": "Anthropic",
+    "DeepMind": "DeepMind",
+    "xAI": "xAI",
+    "Mistral": "Mistral",
+    "NVIDIA": "英伟达",
+    "Meta": "Meta",
+    "Google": "谷歌",
+    "Microsoft": "微软"
+  },
+  "products": {
+    "GPT": "GPT",
+    "Claude": "Claude",
+    "Gemini": "Gemini",
+    "Grok": "Grok",
+    "Llama": "Llama",
+    "ChatGPT": "ChatGPT",
+    "Midjourney": "Midjourney",
+    "Stable Diffusion": "Stable Diffusion"
+  }
+}
