@@ -1198,5 +1198,407 @@
       "open source",
       "inference"
     ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440041",
+    "entity_type": "person",
+    "name_en": "Ray Dalio",
+    "name_zh": "雷·达里奥",
+    "aliases": [
+      "Ray Dalio"
+    ],
+    "x_handle": "RayDalio",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Bridgewater Associates",
+    "priority": "P2",
+    "keywords": [
+      "bridgewater",
+      "macro",
+      "all weather"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440042",
+    "entity_type": "person",
+    "name_en": "Duan Yongping",
+    "name_zh": "段永平",
+    "aliases": [
+      "段永平"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "value investing",
+      "baba",
+      "oppo"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440043",
+    "entity_type": "person",
+    "name_en": "Warren Buffett",
+    "name_zh": "沃伦·巴菲特",
+    "aliases": [
+      "Buffett"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Berkshire Hathaway",
+    "priority": "P2",
+    "keywords": [
+      "berkshire hathaway",
+      "value investing",
+      "insurance"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440044",
+    "entity_type": "person",
+    "name_en": "Charlie Munger",
+    "name_zh": "查理·芒格",
+    "aliases": [
+      "Munger"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Berkshire Hathaway",
+    "priority": "P2",
+    "keywords": [
+      "berkshire hathaway",
+      "value investing",
+      "mental models"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440045",
+    "entity_type": "person",
+    "name_en": "Howard Marks",
+    "name_zh": "霍华德·马克斯",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Oaktree Capital",
+    "priority": "P2",
+    "keywords": [
+      "oaktree",
+      "credit",
+      "macro"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440046",
+    "entity_type": "person",
+    "name_en": "Bill Ackman",
+    "name_zh": "比尔·阿克曼",
+    "aliases": [],
+    "x_handle": "BillAckman",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Pershing Square",
+    "priority": "P2",
+    "keywords": [
+      "pershing square",
+      "activist investing",
+      "hedge fund"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440047",
+    "entity_type": "person",
+    "name_en": "Michael Burry",
+    "name_zh": "迈克尔·伯里",
+    "aliases": [
+      "michaeljburry"
+    ],
+    "x_handle": "michaeljburry",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Scion Asset Management",
+    "priority": "P2",
+    "keywords": [
+      "scion",
+      "macro",
+      "value investing"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440048",
+    "entity_type": "person",
+    "name_en": "Stanley Druckenmiller",
+    "name_zh": "斯坦利·德鲁肯米勒",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Duquesne Family Office",
+    "priority": "P2",
+    "keywords": [
+      "macro",
+      "rates",
+      "equities"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440049",
+    "entity_type": "person",
+    "name_en": "Chamath Palihapitiya",
+    "name_zh": "查马斯·帕里哈皮蒂亚",
+    "aliases": [
+      "chamath"
+    ],
+    "x_handle": "chamath",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Social Capital",
+    "priority": "P2",
+    "keywords": [
+      "social capital",
+      "spac",
+      "venture"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440050",
+    "entity_type": "person",
+    "name_en": "David Tepper",
+    "name_zh": "大卫·泰珀",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Appaloosa Management",
+    "priority": "P2",
+    "keywords": [
+      "macro",
+      "hedge fund",
+      "banking"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440051",
+    "entity_type": "person",
+    "name_en": "Michael Novogratz",
+    "name_zh": "迈克尔·诺沃格拉茨",
+    "aliases": [
+      "novogratz"
+    ],
+    "x_handle": "novogratz",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Galaxy Digital",
+    "priority": "P2",
+    "keywords": [
+      "crypto",
+      "macro",
+      "digital assets"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440052",
+    "entity_type": "person",
+    "name_en": "Paul Tudor Jones",
+    "name_zh": "保罗·都铎·琼斯",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Tudor Investment",
+    "priority": "P2",
+    "keywords": [
+      "macro",
+      "hedge fund",
+      "rates"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440053",
+    "entity_type": "person",
+    "name_en": "Peter Lynch",
+    "name_zh": "彼得·林奇",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Fidelity",
+    "priority": "P2",
+    "keywords": [
+      "growth investing",
+      "fidelity",
+      "stocks"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440054",
+    "entity_type": "person",
+    "name_en": "Ken Griffin",
+    "name_zh": "肯·格里芬",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Citadel",
+    "priority": "P2",
+    "keywords": [
+      "citadel",
+      "market structure",
+      "hedge fund"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440055",
+    "entity_type": "person",
+    "name_en": "Li Lu",
+    "name_zh": "李录",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Himalaya Capital",
+    "priority": "P2",
+    "keywords": [
+      "value investing",
+      "himalaya capital",
+      "china"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440128",
+    "entity_type": "org",
+    "name_en": "Bridgewater Associates",
+    "name_zh": "Bridgewater Associates",
+    "aliases": [
+      "Bridgewater"
+    ],
+    "x_handle": "bridgewater",
+    "github_handle": "",
+    "website_url": "https://www.bridgewater.com",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "bridgewater",
+      "macro",
+      "all weather"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440129",
+    "entity_type": "org",
+    "name_en": "Berkshire Hathaway",
+    "name_zh": "Berkshire Hathaway",
+    "aliases": [
+      "Berkshire"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "https://www.berkshirehathaway.com",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "berkshire hathaway",
+      "value investing",
+      "insurance"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440130",
+    "entity_type": "org",
+    "name_en": "Pershing Square",
+    "name_zh": "Pershing Square",
+    "aliases": [
+      "Pershing Square Capital Management"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "https://pershingsquareholdings.com",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "pershing square",
+      "activist investing",
+      "hedge fund"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440131",
+    "entity_type": "org",
+    "name_en": "Scion Asset Management",
+    "name_zh": "Scion Asset Management",
+    "aliases": [
+      "Scion"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "scion",
+      "macro",
+      "value investing"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440132",
+    "entity_type": "org",
+    "name_en": "Baupost Group",
+    "name_zh": "Baupost Group",
+    "aliases": [
+      "Baupost"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "https://www.baupost.com",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "baupost",
+      "value investing",
+      "hedge fund"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440133",
+    "entity_type": "org",
+    "name_en": "Third Point",
+    "name_zh": "Third Point",
+    "aliases": [
+      "Third Point LLC"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "https://www.thirdpoint.com",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "third point",
+      "hedge fund",
+      "activist"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440134",
+    "entity_type": "org",
+    "name_en": "Soros Fund Management",
+    "name_zh": "Soros Fund Management",
+    "aliases": [
+      "Soros"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "https://www.sorosfundmanagement.com",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "soros",
+      "macro",
+      "hedge fund"
+    ]
   }
 ]

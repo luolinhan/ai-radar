@@ -23,8 +23,9 @@ if [ ! -f ".env" ]; then
     cp .env.example .env
 fi
 
-# 进入docker目录
-cd infra/docker
+# 进入仓库根目录
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR/../.."
 
 # 停止旧容器
 echo "停止旧容器..."

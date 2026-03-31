@@ -7,3 +7,4 @@ PyGithub>=2.1
 httpx>=0.26
 python-dotenv>=1.0
 apscheduler>=3.10
+snscrape>=0.7.0.20230622

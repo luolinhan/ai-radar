@@ -24,35 +24,13 @@ export default function EventsPage() {
 
   const fetchEvents = async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      const apiUrl = `${window.location.origin}/api`
       const res = await fetch(`${apiUrl}/events`)
       const data = await res.json()
       setEvents(data.items || [])
     } catch (error) {
       console.error('获取事件失败:', error)
-      // 使用mock数据
-      setEvents([
-        {
-          event_id: '1',
-          source: 'rss',
-          entity_id: 'openai',
-          title: 'OpenAI发布GPT-5',
-          content_zh: 'OpenAI宣布发布新一代模型GPT-5...',
-          url: 'https://openai.com/blog',
-          published_at: '2024-03-30T10:00:00',
-          alert_level: 'A',
-        },
-        {
-          event_id: '2',
-          source: 'github',
-          entity_id: 'anthropic',
-          title: 'Anthropic SDK更新',
-          content_zh: 'Anthropic发布了Python SDK新版本...',
-          url: 'https://github.com/anthropics',
-          published_at: '2024-03-29T15:00:00',
-          alert_level: 'B',
-        },
-      ])
+      setEvents([])
     }
     setLoading(false)
   }

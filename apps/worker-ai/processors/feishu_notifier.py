@@ -35,8 +35,9 @@ class FeishuNotifier:
     SOURCE_ICONS = {
         "rss": "📰",
         "github": "💻",
+        "x": "𝕏",
         "twitter": "🐦",
-        "x": "🐦",
+        "web": "🌐",
         "arxiv": "📄",
         "blog": "📝",
         "hacker_news": "🔥",

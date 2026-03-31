@@ -7,7 +7,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-ai_radar}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ai_radar_password}
     volumes:
-      - ../data/pg:/var/lib/postgresql/data
+      - ../../data/pg:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
@@ -22,7 +22,7 @@ services:
     container_name: ai-radar-redis
     command: redis-server --appendonly yes
     volumes:
-      - ../data/redis:/data
+      - ../../data/redis:/data
     ports:
       - "6379:6379"
     healthcheck:
@@ -34,7 +34,7 @@ services:
 
   api:
     build:
-      context: ../apps/api
+      context: ../../apps/api
       dockerfile: Dockerfile
     container_name: ai-radar-api
     environment:
@@ -58,12 +58,12 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ../configs:/app/configs:ro
+      - ../../configs:/app/configs:ro
     restart: unless-stopped
 
   worker-collector:
     build:
-      context: ../apps/worker-collector
+      context: ../../apps/worker-collector
       dockerfile: Dockerfile
     container_name: ai-radar-collector
     environment:
@@ -77,8 +77,13 @@ services:
       GITHUB_TOKEN: ${GITHUB_TOKEN}
       RSS_COLLECT_INTERVAL_MINUTES: ${RSS_COLLECT_INTERVAL_MINUTES:-120}
       GITHUB_COLLECT_INTERVAL_MINUTES: ${GITHUB_COLLECT_INTERVAL_MINUTES:-180}
+      X_COLLECT_INTERVAL_MINUTES: ${X_COLLECT_INTERVAL_MINUTES:-240}
+      WEB_COLLECT_INTERVAL_MINUTES: ${WEB_COLLECT_INTERVAL_MINUTES:-360}
       RSS_MAX_ITEMS_PER_FEED: ${RSS_MAX_ITEMS_PER_FEED:-10}
       GITHUB_MAX_RELEASES_PER_REPO: ${GITHUB_MAX_RELEASES_PER_REPO:-5}
+      X_MAX_ITEMS_PER_ACCOUNT: ${X_MAX_ITEMS_PER_ACCOUNT:-5}
+      WEB_MAX_ITEMS_PER_SITE: ${WEB_MAX_ITEMS_PER_SITE:-3}
+      WATCH_ENTITIES_PATH: ${WATCH_ENTITIES_PATH:-/app/configs/watchlists/entities.json}
       SOURCE_TARGETS_PATH: ${SOURCE_TARGETS_PATH:-/app/configs/watchlists/source_targets.json}
     depends_on:
       postgres:
@@ -86,12 +91,12 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ../configs:/app/configs:ro
+      - ../../configs:/app/configs:ro
     restart: unless-stopped
 
   worker-ai:
     build:
-      context: ../apps/worker-ai
+      context: ../../apps/worker-ai
       dockerfile: Dockerfile
     container_name: ai-radar-ai
     environment:
@@ -119,12 +124,12 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ../configs:/app/configs:ro
+      - ../../configs:/app/configs:ro
     restart: unless-stopped
 
   dashboard:
     build:
-      context: ../apps/dashboard
+      context: ../../apps/dashboard
       dockerfile: Dockerfile
     container_name: ai-radar-dashboard
     environment:

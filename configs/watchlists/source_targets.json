@@ -45,6 +45,8 @@
       "entity_id": "sequoia"
     }
   ],
+  "x_accounts": [],
+  "web_pages": [],
   "github_repos": [
     {
       "owner": "openai",

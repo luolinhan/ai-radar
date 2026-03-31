@@ -73,7 +73,8 @@ HIGH_PRIORITY_ENTITY_IDS = {
 
 def compute_signal_score(event, signal_keywords: list[str]) -> int:
     """简单信号评分：用于控制告警质量和排序"""
-    text = f"{event.title or ''}\n{event.content_zh or ''}".lower()
+    text_body = event.content_zh or event.content_raw or ""
+    text = f"{event.title or ''}\n{text_body}".lower()
     score = 0
 
     if event.alert_level == "S":
@@ -86,10 +87,14 @@ def compute_signal_score(event, signal_keywords: list[str]) -> int:
 
     if event.source == "github":
         score += 2
+    elif event.source == "x":
+        score += 2
     elif event.source == "rss":
         score += 1
+    elif event.source == "web":
+        score += 1
 
-    content_len = len((event.content_zh or "").strip())
+    content_len = len((text_body or "").strip())
     if content_len >= 120:
         score += 1
     if content_len >= 300:
@@ -184,8 +189,7 @@ def send_alerts():
 
         # 先取候选，再做质量和近窗去重
         alert_events = db.query(Event).filter(
-            Event.alert_level.in_(["S", "A"]),
-            Event.content_zh.isnot(None),
+            Event.content_raw.isnot(None),
             Event.published_at >= lookback_window_start,
             ~processed_event_exists,
         ).order_by(Event.published_at.desc()).limit(max_per_run * 5).all()
@@ -203,7 +207,9 @@ def send_alerts():
 
             try:
                 content_zh = (event.content_zh or "").strip()
-                if len(content_zh) < 30 or not contains_chinese(content_zh):
+                content_raw = (event.content_raw or "").strip()
+                content_for_card = content_zh or content_raw
+                if len(content_for_card) < 30:
                     db.add(Alert(
                         id=uuid4(),
                         event_id=event.event_id,
@@ -260,7 +266,7 @@ def send_alerts():
 
                 success = notifier.send_event_alert(
                     title=event.title or "新事件",
-                    content_zh=content_zh,
+                    content_zh=content_for_card,
                     url=event.url,
                     source=event.source,
                     alert_level=event.alert_level,

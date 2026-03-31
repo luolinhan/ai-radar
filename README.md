@@ -4,13 +4,14 @@
 
 ## 功能
 
-- 多源采集：RSS、GitHub、X/Twitter、arXiv、Hacker News
+- 多源采集：RSS、GitHub、X/Twitter、网页/官网主页
 - 中文翻译：自动翻译英文源内容
 - 要点提取：结构化提取关键信息
 - 影响分析：判断对研究、产品、市场的影响
 - 特别提醒：飞书即时通知重要事件
 - 质量控制：按信号评分、重复URL窗口、历史窗口过滤告警
 - 控制台：Web界面查看和管理
+- X 采集依赖 `snscrape` 和外网可访问性，默认作为可选能力启用
 
 ## 快速启动
 
@@ -33,10 +34,9 @@ ai-radar/
     worker-collector/  # 采集worker
   packages/
     shared-schema/ # 共享数据模型
-    source-connectors/  # 采集器封装
   configs/
     watchlists/    # 监控名单
-      source_targets.json  # 采集源配置（RSS/GitHub）
+      source_targets.json  # 采集源配置（RSS/GitHub，可扩展到X/网页）
     prompts/       # Prompt版本
     dictionaries/  # 术语词典
   infra/
@@ -59,3 +59,14 @@ ai-radar/
   - `ALERT_LOOKBACK_HOURS`
   - `ALERT_MIN_QUALITY_SCORE`
   - `ALERT_SIGNAL_KEYWORDS`
+- 采集频次与范围（`.env`）：
+  - `RSS_COLLECT_INTERVAL_MINUTES`
+  - `GITHUB_COLLECT_INTERVAL_MINUTES`
+  - `X_COLLECT_INTERVAL_MINUTES`
+  - `WEB_COLLECT_INTERVAL_MINUTES`
+  - `RSS_MAX_ITEMS_PER_FEED`
+  - `GITHUB_MAX_RELEASES_PER_REPO`
+  - `X_MAX_ITEMS_PER_ACCOUNT`
+  - `WEB_MAX_ITEMS_PER_SITE`
+  - `WATCH_ENTITIES_PATH`
+  - `SOURCE_TARGETS_PATH`
