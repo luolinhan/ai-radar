@@ -66,6 +66,6 @@ class Alert(Base):
     alert_level = Column(String)
     sent_at = Column(DateTime)
     channel = Column(String)
-    status = Column(String, default="pending")
+    status = Column(String, default="pending")  # pending, sent, failed, skipped
     error_message = Column(Text)
     created_at = Column(DateTime, default=datetime.utcnow)

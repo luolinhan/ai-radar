@@ -1,0 +1,106 @@
+{
+  "rss_feeds": [
+    {
+      "url": "https://openai.com/blog/rss.xml",
+      "entity_id": "openai"
+    },
+    {
+      "url": "https://www.anthropic.com/news/rss",
+      "entity_id": "anthropic"
+    },
+    {
+      "url": "https://deepmind.google/blog/rss.xml",
+      "entity_id": "google-deepmind"
+    },
+    {
+      "url": "https://huggingface.co/blog/feed.xml",
+      "entity_id": "huggingface"
+    },
+    {
+      "url": "https://blogs.microsoft.com/ai/feed/",
+      "entity_id": "microsoft-ai"
+    },
+    {
+      "url": "https://blog.google/technology/ai/rss/",
+      "entity_id": "google-ai"
+    },
+    {
+      "url": "https://blogs.nvidia.com/feed/",
+      "entity_id": "nvidia"
+    },
+    {
+      "url": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "entity_id": "aws-ai"
+    },
+    {
+      "url": "https://www.databricks.com/blog/category/ai/feed",
+      "entity_id": "databricks-ai"
+    },
+    {
+      "url": "https://www.cohere.com/blog/rss.xml",
+      "entity_id": "cohere"
+    },
+    {
+      "url": "https://sequoiacap.com/feed/",
+      "entity_id": "sequoia"
+    }
+  ],
+  "github_repos": [
+    {
+      "owner": "openai",
+      "repo": "openai-python"
+    },
+    {
+      "owner": "openai",
+      "repo": "openai-node"
+    },
+    {
+      "owner": "openai",
+      "repo": "whisper"
+    },
+    {
+      "owner": "anthropics",
+      "repo": "anthropic-sdk-python"
+    },
+    {
+      "owner": "anthropics",
+      "repo": "anthropic-sdk-typescript"
+    },
+    {
+      "owner": "google-gemini",
+      "repo": "generative-ai-python"
+    },
+    {
+      "owner": "google-gemini",
+      "repo": "generative-ai-js"
+    },
+    {
+      "owner": "huggingface",
+      "repo": "transformers"
+    },
+    {
+      "owner": "vllm-project",
+      "repo": "vllm"
+    },
+    {
+      "owner": "ollama",
+      "repo": "ollama"
+    },
+    {
+      "owner": "langchain-ai",
+      "repo": "langchain"
+    },
+    {
+      "owner": "mistralai",
+      "repo": "mistral-inference"
+    },
+    {
+      "owner": "pytorch",
+      "repo": "pytorch"
+    },
+    {
+      "owner": "meta-llama",
+      "repo": "llama-models"
+    }
+  ]
+}

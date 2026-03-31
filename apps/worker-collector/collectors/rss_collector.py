@@ -18,7 +18,7 @@ class RSSCollector:
     def __init__(self, db: Session):
         self.db = db
 
-    def collect(self, feed_url: str, entity_id: str) -> list:
+    def collect(self, feed_url: str, entity_id: str, max_entries: int = 20) -> list:
         """
         从RSS feed采集内容
 
@@ -38,7 +38,7 @@ class RSSCollector:
             if feed.bozo:
                 logger.warning(f"RSS解析警告: {feed.bozo_exception}")
 
-            for entry in feed.entries[:20]:  # 只取最新20条
+            for entry in feed.entries[:max_entries]:
                 event = self._parse_entry(entry, entity_id, feed_url)
                 if event:
                     events.append(event)
@@ -60,6 +60,9 @@ class RSSCollector:
 
             # 提取链接
             url = entry.get("link", "")
+            if not url:
+                logger.warning("RSS entry缺少link，跳过")
+                return None
 
             # 提取发布时间
             published_at = datetime.utcnow()
@@ -76,6 +79,16 @@ class RSSCollector:
 
             # 保存到数据库
             from models import Event
+
+            # 按来源+URL做幂等，避免同一RSS反复入库
+            existing = self.db.query(Event.event_id).filter(
+                Event.source == "rss",
+                Event.url == url,
+            ).first()
+            if existing:
+                logger.debug(f"RSS重复事件，已跳过: {url}")
+                return None
+
             db_event = Event(
                 event_id=event_id,
                 source="rss",
@@ -102,5 +115,6 @@ class RSSCollector:
             }
 
         except Exception as e:
+            self.db.rollback()
             logger.error(f"解析RSS entry失败: {e}")
             return None

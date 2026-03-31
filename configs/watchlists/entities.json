@@ -4,42 +4,40 @@
     "entity_type": "person",
     "name_en": "Sam Altman",
     "name_zh": "山姆·奥特曼",
-    "aliases": ["sama"],
+    "aliases": [
+      "sama"
+    ],
     "x_handle": "sama",
     "github_handle": "",
     "website_url": "https://samaltman.com",
     "organization": "OpenAI",
     "priority": "P0",
-    "keywords": ["openai", "gpt", "ai"]
+    "keywords": [
+      "openai",
+      "gpt",
+      "chatgpt",
+      "ai"
+    ]
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440002",
     "entity_type": "person",
-    "name_en": "Elon Musk",
-    "name_zh": "埃隆·马斯克",
-    "aliases": ["elonmusk"],
-    "x_handle": "elonmusk",
-    "github_handle": "",
-    "website_url": "",
-    "organization": "xAI",
-    "priority": "P0",
-    "keywords": ["xai", "grok", "tesla", "spacex"]
-  },
-  {
-    "id": "550e8400-e29b-41d4-a716-446655440003",
-    "entity_type": "person",
     "name_en": "Dario Amodei",
-    "name_zh": "达里奥·阿莫迪",
+    "name_zh": "达里奥·阿莫代伊",
     "aliases": [],
     "x_handle": "",
     "github_handle": "",
     "website_url": "",
     "organization": "Anthropic",
     "priority": "P0",
-    "keywords": ["anthropic", "claude"]
+    "keywords": [
+      "anthropic",
+      "claude",
+      "safety"
+    ]
   },
   {
-    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "id": "550e8400-e29b-41d4-a716-446655440003",
     "entity_type": "person",
     "name_en": "Demis Hassabis",
     "name_zh": "德米斯·哈萨比斯",
@@ -49,23 +47,275 @@
     "website_url": "",
     "organization": "Google DeepMind",
     "priority": "P0",
-    "keywords": ["deepmind", "alphafold"]
+    "keywords": [
+      "deepmind",
+      "gemini",
+      "alphafold"
+    ]
   },
   {
-    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "id": "550e8400-e29b-41d4-a716-446655440004",
     "entity_type": "person",
     "name_en": "Jensen Huang",
     "name_zh": "黄仁勋",
-    "aliases": [],
-    "x_handle": "",
+    "aliases": [
+      "jensen"
+    ],
+    "x_handle": "nvidia",
     "github_handle": "",
     "website_url": "",
     "organization": "NVIDIA",
     "priority": "P0",
-    "keywords": ["nvidia", "gpu", "h100"]
+    "keywords": [
+      "nvidia",
+      "gpu",
+      "cuda",
+      "ai chip"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "entity_type": "person",
+    "name_en": "Ilya Sutskever",
+    "name_zh": "伊利亚·苏茨克维",
+    "aliases": [],
+    "x_handle": "ilyasut",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Safe Superintelligence",
+    "priority": "P0",
+    "keywords": [
+      "ssi",
+      "superintelligence",
+      "openai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440006",
+    "entity_type": "person",
+    "name_en": "Yann LeCun",
+    "name_zh": "杨立昆",
+    "aliases": [],
+    "x_handle": "ylecun",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Meta AI",
+    "priority": "P1",
+    "keywords": [
+      "meta ai",
+      "world model",
+      "representation learning"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440007",
+    "entity_type": "person",
+    "name_en": "Fei-Fei Li",
+    "name_zh": "李飞飞",
+    "aliases": [],
+    "x_handle": "drfeifei",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Stanford / World Labs",
+    "priority": "P1",
+    "keywords": [
+      "computer vision",
+      "multimodal",
+      "world labs"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440008",
+    "entity_type": "person",
+    "name_en": "Andrew Ng",
+    "name_zh": "吴恩达",
+    "aliases": [],
+    "x_handle": "AndrewYNg",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "DeepLearning.AI",
+    "priority": "P1",
+    "keywords": [
+      "agent",
+      "machine learning",
+      "deeplearning.ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440009",
+    "entity_type": "person",
+    "name_en": "Jeff Dean",
+    "name_zh": "杰夫·迪恩",
+    "aliases": [],
+    "x_handle": "JeffDean",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Google",
+    "priority": "P1",
+    "keywords": [
+      "google ai",
+      "infrastructure",
+      "research"
+    ]
   },
   {
     "id": "550e8400-e29b-41d4-a716-446655440010",
+    "entity_type": "person",
+    "name_en": "Sundar Pichai",
+    "name_zh": "桑达尔·皮查伊",
+    "aliases": [],
+    "x_handle": "sundarpichai",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Google",
+    "priority": "P1",
+    "keywords": [
+      "google",
+      "gemini",
+      "ai strategy"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440011",
+    "entity_type": "person",
+    "name_en": "Satya Nadella",
+    "name_zh": "萨提亚·纳德拉",
+    "aliases": [],
+    "x_handle": "satyanadella",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Microsoft",
+    "priority": "P1",
+    "keywords": [
+      "microsoft ai",
+      "copilot",
+      "azure ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440012",
+    "entity_type": "person",
+    "name_en": "Mark Zuckerberg",
+    "name_zh": "马克·扎克伯格",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Meta",
+    "priority": "P1",
+    "keywords": [
+      "meta",
+      "llama",
+      "open source ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440013",
+    "entity_type": "person",
+    "name_en": "Elon Musk",
+    "name_zh": "埃隆·马斯克",
+    "aliases": [
+      "elonmusk"
+    ],
+    "x_handle": "elonmusk",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "xAI",
+    "priority": "P1",
+    "keywords": [
+      "xai",
+      "grok",
+      "tesla",
+      "spacex"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440014",
+    "entity_type": "person",
+    "name_en": "Alexandr Wang",
+    "name_zh": "亚历山大·王",
+    "aliases": [],
+    "x_handle": "alexandr_wang",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Scale AI",
+    "priority": "P1",
+    "keywords": [
+      "scale ai",
+      "data",
+      "ai infrastructure"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440015",
+    "entity_type": "person",
+    "name_en": "Aravind Srinivas",
+    "name_zh": "阿拉文德·斯里尼瓦斯",
+    "aliases": [],
+    "x_handle": "AravSrinivas",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Perplexity",
+    "priority": "P1",
+    "keywords": [
+      "perplexity",
+      "search",
+      "agent"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440016",
+    "entity_type": "person",
+    "name_en": "Noam Shazeer",
+    "name_zh": "诺姆·沙泽尔",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Google DeepMind",
+    "priority": "P2",
+    "keywords": [
+      "moe",
+      "gemini",
+      "research"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440017",
+    "entity_type": "person",
+    "name_en": "Arthur Mensch",
+    "name_zh": "阿图尔·门施",
+    "aliases": [],
+    "x_handle": "arthurmensch",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Mistral AI",
+    "priority": "P2",
+    "keywords": [
+      "mistral",
+      "open models",
+      "europe ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440018",
+    "entity_type": "person",
+    "name_en": "Mustafa Suleyman",
+    "name_zh": "穆斯塔法·苏莱曼",
+    "aliases": [],
+    "x_handle": "mustafasuleyman",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Microsoft AI",
+    "priority": "P2",
+    "keywords": [
+      "microsoft ai",
+      "copilot",
+      "consumer ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440101",
     "entity_type": "org",
     "name_en": "OpenAI",
     "name_zh": "OpenAI",
@@ -75,10 +325,14 @@
     "website_url": "https://openai.com",
     "organization": "",
     "priority": "P0",
-    "keywords": ["gpt", "chatgpt", "dall-e"]
+    "keywords": [
+      "gpt",
+      "chatgpt",
+      "openai api"
+    ]
   },
   {
-    "id": "550e8400-e29b-41d4-a716-446655440011",
+    "id": "550e8400-e29b-41d4-a716-446655440102",
     "entity_type": "org",
     "name_en": "Anthropic",
     "name_zh": "Anthropic",
@@ -88,58 +342,861 @@
     "website_url": "https://anthropic.com",
     "organization": "",
     "priority": "P0",
-    "keywords": ["claude", "constitutional ai"]
+    "keywords": [
+      "claude",
+      "constitutional ai"
+    ]
   },
   {
-    "id": "550e8400-e29b-41d4-a716-446655440012",
+    "id": "550e8400-e29b-41d4-a716-446655440103",
     "entity_type": "org",
     "name_en": "Google DeepMind",
     "name_zh": "Google DeepMind",
     "aliases": [],
-    "x_handle": "DeepMind",
+    "x_handle": "GoogleDeepMind",
     "github_handle": "google-deepmind",
     "website_url": "https://deepmind.google",
     "organization": "",
     "priority": "P0",
-    "keywords": ["gemini", "alphafold", "transformer"]
+    "keywords": [
+      "gemini",
+      "alphafold",
+      "world model"
+    ]
   },
   {
-    "id": "550e8400-e29b-41d4-a716-446655440013",
+    "id": "550e8400-e29b-41d4-a716-446655440104",
     "entity_type": "org",
     "name_en": "xAI",
     "name_zh": "xAI",
     "aliases": [],
-    "x_handle": "xabor",
+    "x_handle": "xAI",
     "github_handle": "",
     "website_url": "https://x.ai",
     "organization": "",
-    "priority": "P0",
-    "keywords": ["grok"]
+    "priority": "P1",
+    "keywords": [
+      "grok",
+      "xai"
+    ]
   },
   {
-    "id": "550e8400-e29b-41d4-a716-446655440014",
+    "id": "550e8400-e29b-41d4-a716-446655440105",
     "entity_type": "org",
     "name_en": "Meta AI",
     "name_zh": "Meta AI",
     "aliases": [],
-    "x_handle": "",
+    "x_handle": "AIatMeta",
     "github_handle": "facebookresearch",
     "website_url": "https://ai.meta.com",
     "organization": "",
     "priority": "P1",
-    "keywords": ["llama", "pytorch"]
+    "keywords": [
+      "llama",
+      "meta ai",
+      "open source"
+    ]
   },
   {
-    "id": "550e8400-e29b-41d4-a716-446655440015",
+    "id": "550e8400-e29b-41d4-a716-446655440106",
     "entity_type": "org",
-    "name_en": "Mistral",
-    "name_zh": "Mistral",
-    "aliases": [],
+    "name_en": "Mistral AI",
+    "name_zh": "Mistral AI",
+    "aliases": [
+      "Mistral"
+    ],
     "x_handle": "MistralAI",
     "github_handle": "mistralai",
     "website_url": "https://mistral.ai",
     "organization": "",
     "priority": "P1",
-    "keywords": ["mistral", "mixtral"]
+    "keywords": [
+      "mistral",
+      "mixtral",
+      "eu ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440107",
+    "entity_type": "org",
+    "name_en": "NVIDIA",
+    "name_zh": "英伟达",
+    "aliases": [],
+    "x_handle": "nvidia",
+    "github_handle": "NVIDIA",
+    "website_url": "https://nvidia.com",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "gpu",
+      "blackwell",
+      "cuda",
+      "inference"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440108",
+    "entity_type": "org",
+    "name_en": "Microsoft AI",
+    "name_zh": "微软AI",
+    "aliases": [
+      "Microsoft"
+    ],
+    "x_handle": "Microsoft",
+    "github_handle": "microsoft",
+    "website_url": "https://blogs.microsoft.com/ai/",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "copilot",
+      "azure ai",
+      "openai partnership"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440109",
+    "entity_type": "org",
+    "name_en": "Google AI",
+    "name_zh": "Google AI",
+    "aliases": [],
+    "x_handle": "Google",
+    "github_handle": "google",
+    "website_url": "https://blog.google/technology/ai/",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "gemini",
+      "google ai",
+      "vertex ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440110",
+    "entity_type": "org",
+    "name_en": "Hugging Face",
+    "name_zh": "Hugging Face",
+    "aliases": [],
+    "x_handle": "huggingface",
+    "github_handle": "huggingface",
+    "website_url": "https://huggingface.co",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "open source model",
+      "transformers",
+      "inference"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440111",
+    "entity_type": "org",
+    "name_en": "Perplexity",
+    "name_zh": "Perplexity",
+    "aliases": [],
+    "x_handle": "perplexity_ai",
+    "github_handle": "",
+    "website_url": "https://www.perplexity.ai",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "ai search",
+      "answer engine"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440112",
+    "entity_type": "org",
+    "name_en": "Cohere",
+    "name_zh": "Cohere",
+    "aliases": [],
+    "x_handle": "cohere",
+    "github_handle": "cohere-ai",
+    "website_url": "https://cohere.com",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "enterprise ai",
+      "embedding",
+      "rerank"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440113",
+    "entity_type": "org",
+    "name_en": "Scale AI",
+    "name_zh": "Scale AI",
+    "aliases": [],
+    "x_handle": "scale_ai",
+    "github_handle": "",
+    "website_url": "https://scale.com",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "data engine",
+      "eval",
+      "ai infra"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440114",
+    "entity_type": "org",
+    "name_en": "Databricks AI",
+    "name_zh": "Databricks AI",
+    "aliases": [
+      "Databricks"
+    ],
+    "x_handle": "databricks",
+    "github_handle": "databricks",
+    "website_url": "https://www.databricks.com/blog",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "lakehouse",
+      "mosaicml",
+      "enterprise ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440115",
+    "entity_type": "org",
+    "name_en": "AWS AI",
+    "name_zh": "AWS AI",
+    "aliases": [
+      "Amazon AI"
+    ],
+    "x_handle": "awscloud",
+    "github_handle": "aws",
+    "website_url": "https://aws.amazon.com/machine-learning/",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "bedrock",
+      "sagemaker",
+      "enterprise ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440116",
+    "entity_type": "org",
+    "name_en": "Alibaba Qwen",
+    "name_zh": "阿里通义千问",
+    "aliases": [
+      "Qwen",
+      "Tongyi Qianwen"
+    ],
+    "x_handle": "",
+    "github_handle": "QwenLM",
+    "website_url": "https://qwenlm.github.io/",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "qwen",
+      "open model",
+      "multilingual"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440117",
+    "entity_type": "org",
+    "name_en": "Moonshot AI",
+    "name_zh": "月之暗面",
+    "aliases": [
+      "Kimi"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "https://kimi.moonshot.cn",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "kimi",
+      "long context",
+      "agent"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440118",
+    "entity_type": "org",
+    "name_en": "Zhipu AI",
+    "name_zh": "智谱AI",
+    "aliases": [
+      "GLM"
+    ],
+    "x_handle": "",
+    "github_handle": "THUDM",
+    "website_url": "https://www.zhipuai.cn",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "glm",
+      "agent",
+      "model api"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440119",
+    "entity_type": "org",
+    "name_en": "ByteDance Doubao",
+    "name_zh": "字节豆包",
+    "aliases": [
+      "Doubao",
+      "Seed"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "https://www.doubao.com",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "doubao",
+      "seed",
+      "multimodal"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440120",
+    "entity_type": "org",
+    "name_en": "Baidu AI",
+    "name_zh": "百度AI",
+    "aliases": [
+      "ERNIE"
+    ],
+    "x_handle": "",
+    "github_handle": "PaddlePaddle",
+    "website_url": "https://ai.baidu.com",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "ernie",
+      "wenxin",
+      "foundation model"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440019",
+    "entity_type": "person",
+    "name_en": "Mira Murati",
+    "name_zh": "米拉·穆拉蒂",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Thinking Machines Lab",
+    "priority": "P0",
+    "keywords": [
+      "thinking machines lab",
+      "foundation model",
+      "multimodal"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440020",
+    "entity_type": "person",
+    "name_en": "Cathie Wood",
+    "name_zh": "凯西·伍德",
+    "aliases": [
+      "CathieDWood"
+    ],
+    "x_handle": "CathieDWood",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "ARK Invest",
+    "priority": "P0",
+    "keywords": [
+      "ark invest",
+      "innovation",
+      "disruptive innovation"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440021",
+    "entity_type": "person",
+    "name_en": "Greg Brockman",
+    "name_zh": "格雷格·布罗克曼",
+    "aliases": [
+      "gdb"
+    ],
+    "x_handle": "gdb",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "OpenAI",
+    "priority": "P0",
+    "keywords": [
+      "openai",
+      "platform",
+      "model api"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440022",
+    "entity_type": "person",
+    "name_en": "Geoffrey Hinton",
+    "name_zh": "杰弗里·辛顿",
+    "aliases": [],
+    "x_handle": "geoffreyhinton",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "deep learning",
+      "ai safety",
+      "neural networks"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440023",
+    "entity_type": "person",
+    "name_en": "Yoshua Bengio",
+    "name_zh": "约书亚·本吉奥",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "ai safety",
+      "deep learning",
+      "mila"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440024",
+    "entity_type": "person",
+    "name_en": "Andrej Karpathy",
+    "name_zh": "安德烈·卡帕西",
+    "aliases": [
+      "karpathy"
+    ],
+    "x_handle": "karpathy",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "llm",
+      "agent",
+      "education"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440025",
+    "entity_type": "person",
+    "name_en": "Jim Fan",
+    "name_zh": "吉姆·范",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "NVIDIA",
+    "priority": "P1",
+    "keywords": [
+      "robotics",
+      "simulation",
+      "agent"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440026",
+    "entity_type": "person",
+    "name_en": "Noam Brown",
+    "name_zh": "诺姆·布朗",
+    "aliases": [
+      "polynoamial"
+    ],
+    "x_handle": "polynoamial",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "OpenAI",
+    "priority": "P1",
+    "keywords": [
+      "reasoning",
+      "rl",
+      "games"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440027",
+    "entity_type": "person",
+    "name_en": "John Schulman",
+    "name_zh": "约翰·舒尔曼",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "rlhf",
+      "alignment",
+      "ppo"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440028",
+    "entity_type": "person",
+    "name_en": "Emad Mostaque",
+    "name_zh": "伊马德·莫斯塔克",
+    "aliases": [],
+    "x_handle": "emostaque",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Stability AI",
+    "priority": "P1",
+    "keywords": [
+      "open source",
+      "stability ai",
+      "foundation model"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440029",
+    "entity_type": "person",
+    "name_en": "Ben Horowitz",
+    "name_zh": "本·霍洛维茨",
+    "aliases": [],
+    "x_handle": "bhorowitz",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "a16z",
+    "priority": "P1",
+    "keywords": [
+      "venture",
+      "a16z",
+      "startup"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440030",
+    "entity_type": "person",
+    "name_en": "Marc Andreessen",
+    "name_zh": "马克·安德森",
+    "aliases": [
+      "pmarca"
+    ],
+    "x_handle": "pmarca",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "a16z",
+    "priority": "P1",
+    "keywords": [
+      "venture",
+      "a16z",
+      "software"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440031",
+    "entity_type": "person",
+    "name_en": "Elad Gil",
+    "name_zh": "埃拉德·吉尔",
+    "aliases": [
+      "eladgil"
+    ],
+    "x_handle": "eladgil",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "venture",
+      "ai startups",
+      "seed"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440032",
+    "entity_type": "person",
+    "name_en": "Bill Gurley",
+    "name_zh": "比尔·格利",
+    "aliases": [
+      "bgurley"
+    ],
+    "x_handle": "bgurley",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "venture",
+      "market",
+      "software"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440033",
+    "entity_type": "person",
+    "name_en": "Mary Meeker",
+    "name_zh": "玛丽·米克尔",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "internet trends",
+      "market",
+      "growth"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440034",
+    "entity_type": "person",
+    "name_en": "Sarah Guo",
+    "name_zh": "莎拉·郭",
+    "aliases": [
+      "saranormous"
+    ],
+    "x_handle": "saranormous",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "Conviction",
+    "priority": "P1",
+    "keywords": [
+      "conviction",
+      "ai startups",
+      "venture"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440035",
+    "entity_type": "person",
+    "name_en": "Nat Friedman",
+    "name_zh": "内特·弗里德曼",
+    "aliases": [
+      "natfriedman"
+    ],
+    "x_handle": "natfriedman",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "github",
+      "open source",
+      "startup"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440036",
+    "entity_type": "person",
+    "name_en": "Daniel Gross",
+    "name_zh": "丹尼尔·格罗斯",
+    "aliases": [
+      "danielgross"
+    ],
+    "x_handle": "danielgross",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "ai",
+      "startup",
+      "product"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440037",
+    "entity_type": "person",
+    "name_en": "Kevin Weil",
+    "name_zh": "凯文·韦尔",
+    "aliases": [
+      "kevinweil"
+    ],
+    "x_handle": "kevinweil",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "OpenAI",
+    "priority": "P1",
+    "keywords": [
+      "openai",
+      "product",
+      "consumer"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440038",
+    "entity_type": "person",
+    "name_en": "Susan Zhang",
+    "name_zh": "苏珊·张",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "model training",
+      "research",
+      "open source"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440039",
+    "entity_type": "person",
+    "name_en": "Reid Hoffman",
+    "name_zh": "里德·霍夫曼",
+    "aliases": [
+      "reidhoffman"
+    ],
+    "x_handle": "reidhoffman",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "LinkedIn",
+    "priority": "P2",
+    "keywords": [
+      "linkedin",
+      "ai",
+      "startup"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440040",
+    "entity_type": "person",
+    "name_en": "David Sacks",
+    "name_zh": "大卫·萨克斯",
+    "aliases": [
+      "DavidSacks"
+    ],
+    "x_handle": "DavidSacks",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P2",
+    "keywords": [
+      "policy",
+      "venture",
+      "ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440121",
+    "entity_type": "org",
+    "name_en": "Thinking Machines Lab",
+    "name_zh": "Thinking Machines Lab",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P0",
+    "keywords": [
+      "thinking machines lab",
+      "multimodal",
+      "foundation model"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440122",
+    "entity_type": "org",
+    "name_en": "Safe Superintelligence",
+    "name_zh": "Safe Superintelligence",
+    "aliases": [
+      "SSI"
+    ],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "",
+    "organization": "",
+    "priority": "P0",
+    "keywords": [
+      "ssi",
+      "superintelligence",
+      "alignment"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440123",
+    "entity_type": "org",
+    "name_en": "ARK Invest",
+    "name_zh": "ARK Invest",
+    "aliases": [
+      "ARK"
+    ],
+    "x_handle": "ARKInvest",
+    "github_handle": "",
+    "website_url": "https://ark-invest.com",
+    "organization": "",
+    "priority": "P0",
+    "keywords": [
+      "ark invest",
+      "innovation",
+      "disruptive innovation"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440124",
+    "entity_type": "org",
+    "name_en": "a16z",
+    "name_zh": "a16z",
+    "aliases": [
+      "Andreessen Horowitz"
+    ],
+    "x_handle": "a16z",
+    "github_handle": "",
+    "website_url": "https://a16z.com",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "a16z",
+      "venture",
+      "ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440125",
+    "entity_type": "org",
+    "name_en": "Sequoia",
+    "name_zh": "Sequoia",
+    "aliases": [
+      "Sequoia Capital"
+    ],
+    "x_handle": "sequoia",
+    "github_handle": "",
+    "website_url": "https://sequoiacap.com",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "sequoia",
+      "venture",
+      "ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440126",
+    "entity_type": "org",
+    "name_en": "Benchmark",
+    "name_zh": "Benchmark",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "https://www.benchmark.com",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "benchmark",
+      "venture",
+      "ai"
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440127",
+    "entity_type": "org",
+    "name_en": "Together AI",
+    "name_zh": "Together AI",
+    "aliases": [],
+    "x_handle": "",
+    "github_handle": "",
+    "website_url": "https://www.together.ai",
+    "organization": "",
+    "priority": "P1",
+    "keywords": [
+      "together ai",
+      "open source",
+      "inference"
+    ]
   }
 ]

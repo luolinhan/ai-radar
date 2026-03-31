@@ -19,7 +19,7 @@ class GitHubCollector:
         self.github = Github(token)
         self.db = db
 
-    def collect_releases(self, owner: str, repo: str) -> list:
+    def collect_releases(self, owner: str, repo: str, max_releases: int = 10) -> list:
         """
         采集仓库的release
 
@@ -38,7 +38,7 @@ class GitHubCollector:
 
             releases = repository.get_releases()
 
-            for release in releases[:10]:  # 只取最近10个release
+            for release in releases[:max_releases]:
                 event = self._parse_release(release, owner, repo)
                 if event:
                     events.append(event)
@@ -58,6 +58,16 @@ class GitHubCollector:
 
             # 保存到数据库
             from models import Event
+
+            # 按来源+URL做幂等，避免重复入库同一release
+            existing = self.db.query(Event.event_id).filter(
+                Event.source == "github",
+                Event.url == release.html_url,
+            ).first()
+            if existing:
+                logger.debug(f"GitHub重复事件，已跳过: {release.html_url}")
+                return None
+
             db_event = Event(
                 event_id=event_id,
                 source="github",
@@ -84,5 +94,6 @@ class GitHubCollector:
             }
 
         except Exception as e:
+            self.db.rollback()
             logger.error(f"解析GitHub release失败: {e}")
             return None

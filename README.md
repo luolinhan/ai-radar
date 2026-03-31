@@ -9,6 +9,7 @@
 - 要点提取：结构化提取关键信息
 - 影响分析：判断对研究、产品、市场的影响
 - 特别提醒：飞书即时通知重要事件
+- 质量控制：按信号评分、重复URL窗口、历史窗口过滤告警
 - 控制台：Web界面查看和管理
 
 ## 快速启动
@@ -35,6 +36,7 @@ ai-radar/
     source-connectors/  # 采集器封装
   configs/
     watchlists/    # 监控名单
+      source_targets.json  # 采集源配置（RSS/GitHub）
     prompts/       # Prompt版本
     dictionaries/  # 术语词典
   infra/
@@ -45,3 +47,15 @@ ai-radar/
 ## 部署
 
 服务器部署脚本见 `infra/scripts/deploy.sh`
+
+## 推送质量与频次调优
+
+- 采集源：`configs/watchlists/source_targets.json`
+- 影响名单：`configs/watchlists/entities.json`
+- 告警频次与质量（`.env`）：
+  - `ALERT_SCAN_INTERVAL_MINUTES`
+  - `ALERT_MAX_PER_RUN`
+  - `ALERT_DEDUP_HOURS`
+  - `ALERT_LOOKBACK_HOURS`
+  - `ALERT_MIN_QUALITY_SCORE`
+  - `ALERT_SIGNAL_KEYWORDS`

@@ -3,6 +3,9 @@
 """
 
 import logging
+import re
+from typing import Optional
+
 import httpx
 
 logger = logging.getLogger(__name__)
@@ -16,7 +19,7 @@ class Translator:
         self.api_key = api_key
         self.model = model
 
-    def translate(self, content: str) -> str:
+    def translate(self, content: str) -> Optional[str]:
         """
         翻译内容到中文
 
@@ -24,7 +27,7 @@ class Translator:
             content: 原始内容（通常英文）
 
         Returns:
-            中文翻译结果
+            中文翻译结果；失败时返回None
         """
         if not content:
             return ""
@@ -65,11 +68,19 @@ class Translator:
                 if response.status_code == 200:
                     data = response.json()
                     translated = data["choices"][0]["message"]["content"]
-                    return translated.strip()
+                    translated = translated.strip()
+                    if not translated:
+                        return None
+                    return translated
                 else:
-                    logger.error(f"翻译API错误: {response.status_code}")
-                    return content  # 返回原文作为fallback
+                    logger.error(f"翻译API错误: {response.status_code}, body={response.text[:300]}")
+                    return None
 
         except Exception as e:
             logger.error(f"翻译失败: {e}")
-            return content  # 返回原文作为fallback
+            return None
+
+
+def contains_chinese(text: str) -> bool:
+    """判断文本是否包含中文字符"""
+    return bool(re.search(r"[\u4e00-\u9fff]", text or ""))
