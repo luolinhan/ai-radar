@@ -6,7 +6,7 @@ from datetime import datetime
 from uuid import UUID
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
 
 from database import get_db
@@ -51,5 +51,5 @@ async def get_event(event_id: UUID, db: Session = Depends(get_db)):
     """获取单个事件详情"""
     event = db.query(Event).filter(Event.event_id == event_id).first()
     if not event:
-        return {"error": "Event not found"}
+        raise HTTPException(status_code=404, detail="Event not found")
     return EventResponse.from_orm(event)

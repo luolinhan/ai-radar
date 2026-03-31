@@ -22,17 +22,17 @@ class EventResponse(BaseModel):
     content_zh: Optional[str] = None
     url: str
     published_at: datetime
-    fetched_at: datetime
-    language: str = "en"
+    fetched_at: datetime | None = None
+    language: str | None = "en"
     topics: List[str] = []
     claims: List[str] = []
     companies: List[str] = []
     products: List[str] = []
     tickers: List[str] = []
-    signals: List[str] = []
-    novelty_score: float = 0
-    impact_score: float = 0
-    confidence_score: float = 0
+    signals: Any = None
+    novelty_score: float | None = 0
+    impact_score: float | None = 0
+    confidence_score: float | None = 0
     alert_level: str = "C"
     alert_reason: Optional[str] = None
     cluster_id: Optional[UUID] = None
@@ -43,11 +43,21 @@ class EventResponse(BaseModel):
     why_it_matters_zh: Optional[str] = None
     what_to_watch_next: Optional[str] = None
 
-    @field_validator('topics', 'claims', 'companies', 'products', 'tickers', 'signals', mode='before')
+    @field_validator('topics', 'claims', 'companies', 'products', 'tickers', mode='before')
     @classmethod
     def none_to_list(cls, v: Any) -> List[str]:
         if v is None:
             return []
+        return v
+
+    @field_validator('signals', mode='before')
+    @classmethod
+    def passthrough_signals(cls, v: Any) -> Any:
+        return v
+
+    @field_validator('fetched_at', 'language', 'novelty_score', 'impact_score', 'confidence_score', mode='before')
+    @classmethod
+    def none_to_defaults(cls, v: Any) -> Any:
         return v
 
     class Config:
