@@ -73,8 +73,9 @@ class Translator:
                                 {"role": "system", "content": "你是专业中英科技翻译，输出简体中文译文。"},
                                 {"role": "user", "content": prompt},
                             ],
+                            "enable_thinking": False,
                             "temperature": 0.1,
-                            "max_tokens": 2600,
+                            "max_tokens": 1800,
                         },
                     )
 

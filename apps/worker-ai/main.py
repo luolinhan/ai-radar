@@ -84,8 +84,8 @@ def build_translator() -> Translator:
         api_base_url=os.getenv("AI_API_BASE_URL"),
         api_key=os.getenv("AI_API_KEY"),
         model=os.getenv("AI_MODEL", "qwen3.5-plus"),
-        timeout_seconds=int(os.getenv("TRANSLATE_TIMEOUT_SECONDS", "60")),
-        max_retries=int(os.getenv("TRANSLATE_MAX_RETRIES", "2")),
+        timeout_seconds=int(os.getenv("TRANSLATE_TIMEOUT_SECONDS", "40")),
+        max_retries=int(os.getenv("TRANSLATE_MAX_RETRIES", "1")),
     )
 
 
@@ -131,7 +131,7 @@ def process_untranslated():
     try:
         translator = build_translator()
         batch_size = int(os.getenv("TRANSLATE_BATCH_SIZE", "40"))
-        concurrency = int(os.getenv("TRANSLATE_CONCURRENCY", "4"))
+        concurrency = int(os.getenv("TRANSLATE_CONCURRENCY", "2"))
         from models import Event
 
         # 获取未翻译的事件
