@@ -89,6 +89,10 @@ def build_translator() -> Translator:
     )
 
 
+def translate_enabled() -> bool:
+    return parse_bool_env("TRANSLATE_ENABLED", True)
+
+
 def compute_signal_score(event, signal_keywords: list[str]) -> int:
     """简单信号评分：用于控制告警质量和排序"""
     text_body = event.content_zh or event.content_raw or ""
@@ -125,6 +129,10 @@ def compute_signal_score(event, signal_keywords: list[str]) -> int:
 
 def process_untranslated():
     """处理未翻译的事件"""
+    if not translate_enabled():
+        logger.info("翻译已禁用，跳过未翻译处理")
+        return
+
     logger.info("开始处理未翻译事件...")
     db = SessionLocal()
 
@@ -238,6 +246,7 @@ def send_alerts():
             dashboard_url=os.getenv("DASHBOARD_PUBLIC_URL", ""),
         )
         require_translation = parse_bool_env("ALERT_REQUIRE_TRANSLATION", True)
+        allow_on_demand_translation = translate_enabled()
         max_per_run = int(os.getenv("ALERT_MAX_PER_RUN", "3"))
         dedup_hours = int(os.getenv("ALERT_DEDUP_HOURS", "24"))
         lookback_hours = int(os.getenv("ALERT_LOOKBACK_HOURS", "72"))
@@ -285,7 +294,7 @@ def send_alerts():
                 if not content_zh and content_raw:
                     if contains_chinese(content_raw):
                         content_zh = content_raw
-                    else:
+                    elif allow_on_demand_translation:
                         if translator is None:
                             translator = build_translator()
                         translated = translator.translate(content_raw)
@@ -314,6 +323,9 @@ def send_alerts():
                 content_for_card = (content_zh or "").strip()
                 if not content_for_card and not require_translation:
                     content_for_card = content_raw
+
+                if not content_for_card:
+                    content_for_card = event.title or "新事件"
 
                 if len(content_for_card) < 30:
                     db.add(Alert(
