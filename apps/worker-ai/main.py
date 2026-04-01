@@ -98,13 +98,29 @@ def translation_batch_settings() -> tuple[int, int]:
     return max(1, max_items), max(1000, max_chars)
 
 
+def translation_item_text_limit() -> int:
+    return max(300, int(os.getenv("TRANSLATE_ITEM_TEXT_LIMIT", "1500")))
+
+
+def prepare_translation_text(text: str) -> str:
+    raw = (text or "").strip()
+    if not raw:
+        return ""
+
+    limit = translation_item_text_limit()
+    if len(raw) <= limit:
+        return raw
+
+    return raw[:limit].rstrip() + "\n\n[内容较长，已截断，仅翻译前半部分以控制成本和时延]"
+
+
 def split_translation_items(items: list[dict], max_items: int, max_chars: int) -> list[list[dict]]:
     batches: list[list[dict]] = []
     current_batch: list[dict] = []
     current_chars = 0
 
     for item in items:
-        text = str(item.get("text", "")).strip()
+        text = prepare_translation_text(str(item.get("text", "")))
         if not text:
             continue
 
@@ -140,7 +156,7 @@ def translate_items_with_fallback(translator: Translator, items: list[dict]) -> 
         if result:
             return result
 
-        text = str(single.get("text", "")).strip()
+        text = prepare_translation_text(str(single.get("text", "")))
         translated = translator.translate(text)
         if translated:
             return {str(single.get("id", "")).strip(): translated}

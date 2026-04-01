@@ -139,6 +139,7 @@ class Translator:
 3. 输出必须是严格 JSON 数组，不要 Markdown，不要代码块，不要额外解释
 4. JSON 每个元素格式必须是 {{\"id\": \"原始id\", \"translation\": \"中文译文\"}}
 5. 原始 id 必须原样返回，顺序可以不同，但不要丢项
+6. translation 请尽量保持单行，换行改为空格，不要保留 HTML 标签
 
 输入：
 {payload}
