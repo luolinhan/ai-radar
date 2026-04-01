@@ -68,6 +68,9 @@ class GitHubCollector:
                 logger.debug(f"GitHub重复事件，已跳过: {release.html_url}")
                 return None
 
+            published_at = release.published_at or datetime.utcnow()
+            published_at_inferred = release.published_at is None
+
             db_event = Event(
                 event_id=event_id,
                 source="github",
@@ -78,9 +81,10 @@ class GitHubCollector:
                 title=title,
                 content_raw=content,
                 url=release.html_url,
-                published_at=release.published_at or datetime.utcnow(),
+                published_at=published_at,
                 fetched_at=datetime.utcnow(),
                 language="en",
+                signals={"published_at_inferred": published_at_inferred},
             )
 
             self.db.add(db_event)

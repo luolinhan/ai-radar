@@ -28,6 +28,38 @@ def format_beijing_time(dt: Optional[datetime]) -> str:
     return beijing_time.strftime("%Y/%m/%d %H:%M")
 
 
+def format_lag(published_at: Optional[datetime], reference: Optional[datetime] = None) -> Optional[str]:
+    """格式化事件到当前的时效延迟"""
+    if published_at is None:
+        return None
+    if reference is None:
+        reference = datetime.now(timezone.utc)
+
+    event_time = published_at
+    if event_time.tzinfo is None:
+        event_time = event_time.replace(tzinfo=timezone.utc)
+    ref_time = reference
+    if ref_time.tzinfo is None:
+        ref_time = ref_time.replace(tzinfo=timezone.utc)
+
+    delta = ref_time - event_time
+    if delta.total_seconds() < 0:
+        return "刚刚"
+
+    total_minutes = int(delta.total_seconds() // 60)
+    if total_minutes < 1:
+        return "<1分钟"
+    if total_minutes < 60:
+        return f"{total_minutes}分钟"
+
+    total_hours = total_minutes // 60
+    if total_hours < 24:
+        return f"{total_hours}小时"
+
+    total_days = total_hours // 24
+    return f"{total_days}天"
+
+
 class FeishuNotifier:
     """飞书机器人通知"""
 
@@ -64,6 +96,8 @@ class FeishuNotifier:
         alert_level: str,
         entity_id: Optional[str] = None,
         published_at: Optional[datetime] = None,
+        fetched_at: Optional[datetime] = None,
+        published_time_inferred: bool = False,
         quality_score: Optional[int] = None,
         why_it_matters_zh: Optional[str] = None,
         research_impact: Optional[str] = None,
@@ -78,7 +112,9 @@ class FeishuNotifier:
         source_icon = self.SOURCE_ICONS.get(source.lower(), "📡")
 
         # 时间转为北京时间
-        time_str = format_beijing_time(published_at)
+        event_time_str = "未知（用采集时间代替）" if published_time_inferred else format_beijing_time(published_at)
+        fetched_time_str = format_beijing_time(fetched_at)
+        lag_str = None if published_time_inferred else format_lag(published_at)
 
         # 构建卡片元素
         elements = []
@@ -87,10 +123,13 @@ class FeishuNotifier:
         meta_parts = [
             f"{source_icon} **{source.upper()}**",
             f"🏢 {entity_id or '-'}",
-            f"🕐 {time_str}",
+            f"🕐 事件 {event_time_str}",
+            f"📥 采集 {fetched_time_str}",
         ]
         if quality_score is not None:
             meta_parts.append(f"⭐ {quality_score}分")
+        if lag_str:
+            meta_parts.append(f"⏱️ 延迟 {lag_str}")
 
         elements.append({
             "tag": "div",
@@ -182,7 +221,7 @@ class FeishuNotifier:
             "elements": [
                 {
                     "tag": "plain_text",
-                    "content": f"AI Radar · {now_beijing}",
+                    "content": f"AI Radar · 推送 {now_beijing}",
                 }
             ],
         })

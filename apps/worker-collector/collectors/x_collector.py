@@ -134,8 +134,10 @@ class XCollector:
             published = getattr(entry, "published_parsed", None) or getattr(entry, "updated_parsed", None)
             if published:
                 published_at = datetime(*published[:6])
+                published_at_inferred = False
             else:
                 published_at = datetime.utcnow()
+                published_at_inferred = True
 
             author = clean_text(entry.get("author", "") or handle, max_length=80)
 
@@ -163,6 +165,7 @@ class XCollector:
                 published_at=published_at,
                 fetched_at=datetime.utcnow(),
                 language="en",
+                signals={"published_at_inferred": published_at_inferred},
             )
 
             self.db.add(db_event)
@@ -200,7 +203,9 @@ class XCollector:
                 return None
 
             title = clean_text(content.split("\n", 1)[0], max_length=140)
-            published_at = getattr(tweet, "date", None) or datetime.utcnow()
+            tweet_date = getattr(tweet, "date", None)
+            published_at = tweet_date or datetime.utcnow()
+            published_at_inferred = tweet_date is None
             user = getattr(tweet, "user", None)
             author = (
                 getattr(user, "displayname", None)
@@ -232,6 +237,7 @@ class XCollector:
                 published_at=published_at,
                 fetched_at=datetime.utcnow(),
                 language="en",
+                signals={"published_at_inferred": published_at_inferred},
             )
 
             self.db.add(db_event)

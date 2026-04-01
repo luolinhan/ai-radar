@@ -5,6 +5,7 @@ AI Worker - 负责翻译、分析、通知
 import os
 import time
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta
 from uuid import uuid4
 
@@ -71,6 +72,23 @@ HIGH_PRIORITY_ENTITY_IDS = {
 }
 
 
+def parse_bool_env(name: str, default: bool) -> bool:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "y", "on"}
+
+
+def build_translator() -> Translator:
+    return Translator(
+        api_base_url=os.getenv("AI_API_BASE_URL"),
+        api_key=os.getenv("AI_API_KEY"),
+        model=os.getenv("AI_MODEL", "qwen3.5-plus"),
+        timeout_seconds=int(os.getenv("TRANSLATE_TIMEOUT_SECONDS", "60")),
+        max_retries=int(os.getenv("TRANSLATE_MAX_RETRIES", "2")),
+    )
+
+
 def compute_signal_score(event, signal_keywords: list[str]) -> int:
     """简单信号评分：用于控制告警质量和排序"""
     text_body = event.content_zh or event.content_raw or ""
@@ -111,41 +129,94 @@ def process_untranslated():
     db = SessionLocal()
 
     try:
-        translator = Translator(
-            api_base_url=os.getenv("AI_API_BASE_URL"),
-            api_key=os.getenv("AI_API_KEY"),
-            model=os.getenv("AI_MODEL", "qwen3.5-plus"),
+        translator = build_translator()
+        batch_size = int(os.getenv("TRANSLATE_BATCH_SIZE", "40"))
+        concurrency = int(os.getenv("TRANSLATE_CONCURRENCY", "4"))
+        from models import Event
+
+        # 获取未翻译的事件
+        untranslated = (
+            db.query(Event)
+            .filter(Event.content_zh.is_(None), Event.content_raw.isnot(None))
+            .order_by(Event.published_at.desc())
+            .limit(batch_size)
+            .all()
         )
 
-        from models import Event
-        # 获取未翻译的事件
-        untranslated = db.query(Event).filter(Event.content_zh.is_(None)).order_by(Event.published_at.desc()).limit(10).all()
+        if not untranslated:
+            logger.info("没有待翻译事件")
+            return
+
+        translated_count = 0
+        copied_chinese_count = 0
+        failed_count = 0
+
+        pending_jobs = []
+        event_map = {}
 
         for event in untranslated:
-            try:
-                logger.info(f"翻译事件: {event.event_id}")
-                translated = translator.translate(event.content_raw)
-                if not translated:
-                    logger.warning(f"翻译结果为空，跳过本次更新: {event.event_id}")
-                    continue
+            raw_text = (event.content_raw or "").strip()
+            if not raw_text:
+                failed_count += 1
+                continue
 
-                # 防止API异常时把原英文回写成“中文”
-                if translated.strip() == (event.content_raw or "").strip() and not contains_chinese(translated):
-                    logger.warning(f"翻译结果疑似无效（与原文一致），跳过: {event.event_id}")
-                    continue
+            if contains_chinese(raw_text):
+                event.content_zh = raw_text
+                copied_chinese_count += 1
+                continue
 
-                event.content_zh = translated
-                db.commit()
+            pending_jobs.append((event.event_id, raw_text))
+            event_map[event.event_id] = event
 
-                logger.info(f"翻译完成: {event.event_id}")
+        if pending_jobs:
+            workers = max(1, min(concurrency, len(pending_jobs)))
+            logger.info("并发翻译启动: pending=%s, workers=%s", len(pending_jobs), workers)
+            with ThreadPoolExecutor(max_workers=workers) as executor:
+                future_map = {
+                    executor.submit(translator.translate, text): event_id
+                    for event_id, text in pending_jobs
+                }
 
-            except Exception as e:
-                db.rollback()
-                logger.error(f"翻译失败: {event.event_id}, 错误: {e}")
+                for future in as_completed(future_map):
+                    event_id = future_map[future]
+                    event = event_map.get(event_id)
+                    if not event:
+                        failed_count += 1
+                        continue
 
-        logger.info(f"处理了 {len(untranslated)} 条未翻译事件")
+                    raw_text = (event.content_raw or "").strip()
+                    try:
+                        translated = future.result()
+                    except Exception as e:
+                        failed_count += 1
+                        logger.error("翻译失败: %s, 错误: %s", event_id, e)
+                        continue
+
+                    if not translated:
+                        failed_count += 1
+                        logger.warning("翻译为空，跳过: %s", event_id)
+                        continue
+
+                    translated = translated.strip()
+                    if translated == raw_text and not contains_chinese(translated):
+                        failed_count += 1
+                        logger.warning("翻译结果疑似无效（与原文一致），跳过: %s", event_id)
+                        continue
+
+                    event.content_zh = translated
+                    translated_count += 1
+
+        db.commit()
+        logger.info(
+            "翻译处理完成: total=%s, translated=%s, copied=%s, failed=%s",
+            len(untranslated),
+            translated_count,
+            copied_chinese_count,
+            failed_count,
+        )
 
     except Exception as e:
+        db.rollback()
         logger.error(f"翻译处理失败: {e}")
     finally:
         db.close()
@@ -166,6 +237,7 @@ def send_alerts():
             webhook_url,
             dashboard_url=os.getenv("DASHBOARD_PUBLIC_URL", ""),
         )
+        require_translation = parse_bool_env("ALERT_REQUIRE_TRANSLATION", True)
         max_per_run = int(os.getenv("ALERT_MAX_PER_RUN", "3"))
         dedup_hours = int(os.getenv("ALERT_DEDUP_HOURS", "24"))
         lookback_hours = int(os.getenv("ALERT_LOOKBACK_HOURS", "72"))
@@ -180,6 +252,7 @@ def send_alerts():
         lookback_window_start = now - timedelta(hours=lookback_hours)
 
         from models import Event, Alert
+        translator = None
         # 已发送/已跳过的事件不再重复处理
         processed_event_exists = db.query(Alert.id).filter(
             Alert.event_id == Event.event_id,
@@ -208,7 +281,40 @@ def send_alerts():
             try:
                 content_zh = (event.content_zh or "").strip()
                 content_raw = (event.content_raw or "").strip()
-                content_for_card = content_zh or content_raw
+
+                if not content_zh and content_raw:
+                    if contains_chinese(content_raw):
+                        content_zh = content_raw
+                    else:
+                        if translator is None:
+                            translator = build_translator()
+                        translated = translator.translate(content_raw)
+                        if translated:
+                            translated = translated.strip()
+                            if translated != content_raw or contains_chinese(translated):
+                                content_zh = translated
+                        if not content_zh and require_translation:
+                            db.add(Alert(
+                                id=uuid4(),
+                                event_id=event.event_id,
+                                alert_level=event.alert_level,
+                                sent_at=now,
+                                channel="feishu",
+                                status="skipped",
+                                error_message="translation_required_but_unavailable",
+                            ))
+                            db.commit()
+                            logger.info(f"跳过未翻译告警: {event.event_id}")
+                            continue
+
+                    if content_zh:
+                        event.content_zh = content_zh
+                        db.commit()
+
+                content_for_card = (content_zh or "").strip()
+                if not content_for_card and not require_translation:
+                    content_for_card = content_raw
+
                 if len(content_for_card) < 30:
                     db.add(Alert(
                         id=uuid4(),
@@ -263,6 +369,7 @@ def send_alerts():
                     continue
 
                 logger.info(f"发送告警: {event.event_id}")
+                published_time_inferred = bool((event.signals or {}).get("published_at_inferred", False))
 
                 success = notifier.send_event_alert(
                     title=event.title or "新事件",
@@ -272,6 +379,8 @@ def send_alerts():
                     alert_level=event.alert_level,
                     entity_id=event.entity_id,
                     published_at=event.published_at,
+                    fetched_at=event.fetched_at,
+                    published_time_inferred=published_time_inferred,
                     quality_score=quality_score,
                     why_it_matters_zh=event.why_it_matters_zh,
                     research_impact=event.research_impact,
@@ -328,8 +437,12 @@ def main():
 
     scheduler = BackgroundScheduler()
 
-    # 翻译每5分钟处理一次
-    scheduler.add_job(process_untranslated, 'interval', minutes=5)
+    # 翻译任务：默认每2分钟执行一次，并发批处理
+    scheduler.add_job(
+        process_untranslated,
+        'interval',
+        minutes=int(os.getenv("TRANSLATE_SCAN_INTERVAL_MINUTES", "2")),
+    )
 
     # 告警定时检查（默认每10分钟，可通过环境变量覆盖）
     scheduler.add_job(

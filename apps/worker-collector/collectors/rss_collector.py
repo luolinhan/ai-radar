@@ -66,10 +66,13 @@ class RSSCollector:
 
             # 提取发布时间
             published_at = datetime.utcnow()
+            published_at_inferred = True
             if hasattr(entry, "published_parsed") and entry.published_parsed:
                 published_at = datetime(*entry.published_parsed[:6])
+                published_at_inferred = False
             elif hasattr(entry, "updated_parsed") and entry.updated_parsed:
                 published_at = datetime(*entry.updated_parsed[:6])
+                published_at_inferred = False
 
             # 提取作者
             author = entry.get("author", "")
@@ -102,6 +105,7 @@ class RSSCollector:
                 published_at=published_at,
                 fetched_at=datetime.utcnow(),
                 language="en",
+                signals={"published_at_inferred": published_at_inferred},
             )
 
             self.db.add(db_event)

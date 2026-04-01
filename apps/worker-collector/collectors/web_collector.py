@@ -113,7 +113,7 @@ class WebCollector:
         title = self._extract_title(html, page_url)
         description = self._extract_description(html)
         author = self._extract_author(html)
-        published_at = self._extract_published_at(html)
+        published_at, published_at_inferred = self._extract_published_at(html)
         lang = self._extract_lang(html)
 
         body_text = self._extract_body_text(html)
@@ -147,7 +147,10 @@ class WebCollector:
             published_at=published_at,
             fetched_at=datetime.utcnow(),
             language=lang,
-            signals={"content_hash": content_hash},
+            signals={
+                "content_hash": content_hash,
+                "published_at_inferred": published_at_inferred,
+            },
         )
 
         self.db.add(db_event)
@@ -177,15 +180,15 @@ class WebCollector:
         match = self.META_AUTHOR_RE.search(html)
         return clean_text(match.group(1), max_length=80) if match else ""
 
-    def _extract_published_at(self, html: str) -> datetime:
+    def _extract_published_at(self, html: str) -> tuple[datetime, bool]:
         match = self.META_PUBLISHED_RE.search(html)
         if match:
             value = clean_text(match.group(1))
             try:
-                return datetime.fromisoformat(value.replace("Z", "+00:00")).replace(tzinfo=None)
+                return datetime.fromisoformat(value.replace("Z", "+00:00")).replace(tzinfo=None), False
             except Exception:
                 pass
-        return datetime.utcnow()
+        return datetime.utcnow(), True
 
     def _extract_lang(self, html: str) -> str:
         match = self.HTML_LANG_RE.search(html)
@@ -205,4 +208,3 @@ class WebCollector:
         stripped = re.sub(r"<[^>]+>", " ", body)
         stripped = clean_text(stripped, max_length=2500)
         return stripped
-
