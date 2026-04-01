@@ -2,6 +2,7 @@
 翻译器 - 使用AI API进行翻译
 """
 
+import json
 import logging
 import re
 import time
@@ -107,6 +108,136 @@ class Translator:
                 time.sleep(min(2 ** attempt, 5))
 
         return None
+
+    def translate_batch(self, items: list[dict]) -> Optional[dict[str, str]]:
+        """
+        批量翻译内容到中文。
+
+        Args:
+            items: [{"id": "...", "text": "..."}]
+
+        Returns:
+            id -> translation 映射；失败时返回None
+        """
+        normalized_items = []
+        for item in items:
+            item_id = str(item.get("id", "")).strip()
+            text = str(item.get("text", "")).strip()
+            if not item_id or not text:
+                continue
+            normalized_items.append({"id": item_id, "text": text})
+
+        if not normalized_items:
+            return {}
+
+        payload = json.dumps(normalized_items, ensure_ascii=False)
+        prompt = f"""请将下面这些内容批量翻译成简体中文。
+
+要求：
+1. 每条内容独立翻译，不要合并、不要总结、不要遗漏
+2. 保留链接、@handle、股票代码、代码片段
+3. 输出必须是严格 JSON 数组，不要 Markdown，不要代码块，不要额外解释
+4. JSON 每个元素格式必须是 {{\"id\": \"原始id\", \"translation\": \"中文译文\"}}
+5. 原始 id 必须原样返回，顺序可以不同，但不要丢项
+
+输入：
+{payload}
+
+只输出 JSON 数组。"""
+
+        for attempt in range(self.max_retries + 1):
+            try:
+                with httpx.Client(timeout=self.timeout_seconds) as client:
+                    url = f"{self.api_base_url}/chat/completions"
+                    response = client.post(
+                        url,
+                        headers={
+                            "Authorization": f"Bearer {self.api_key}",
+                            "Content-Type": "application/json",
+                        },
+                        json={
+                            "model": self.model,
+                            "messages": [
+                                {"role": "system", "content": "你是专业中英科技翻译，输出严格 JSON。"},
+                                {"role": "user", "content": prompt},
+                            ],
+                            "enable_thinking": False,
+                            "temperature": 0.1,
+                            "max_tokens": 4096,
+                        },
+                    )
+
+                    if response.status_code != 200:
+                        logger.error(
+                            "批量翻译API错误: status=%s, attempt=%s/%s, body=%s",
+                            response.status_code,
+                            attempt + 1,
+                            self.max_retries + 1,
+                            response.text[:300],
+                        )
+                    else:
+                        data = response.json()
+                        raw_text = data["choices"][0]["message"]["content"].strip()
+                        parsed = self._parse_batch_translation_response(raw_text)
+                        if parsed:
+                            return parsed
+                        logger.error(
+                            "批量翻译响应解析失败: attempt=%s/%s, body=%s",
+                            attempt + 1,
+                            self.max_retries + 1,
+                            raw_text[:500],
+                        )
+            except Exception as e:
+                logger.error(
+                    "批量翻译失败: attempt=%s/%s, error=%s",
+                    attempt + 1,
+                    self.max_retries + 1,
+                    e,
+                )
+
+            if attempt < self.max_retries:
+                time.sleep(min(2 ** attempt, 5))
+
+        return None
+
+    def _parse_batch_translation_response(self, content: str) -> Optional[dict[str, str]]:
+        raw = (content or "").strip()
+        if not raw:
+            return None
+
+        if raw.startswith("```"):
+            lines = raw.splitlines()
+            if len(lines) >= 3:
+                raw = "\n".join(lines[1:-1]).strip()
+
+        try:
+            data = json.loads(raw)
+        except Exception:
+            start = raw.find("[")
+            end = raw.rfind("]")
+            if start == -1 or end == -1 or end <= start:
+                return None
+            try:
+                data = json.loads(raw[start : end + 1])
+            except Exception:
+                return None
+
+        result: dict[str, str] = {}
+        if isinstance(data, dict):
+            data = data.get("items") or data.get("translations") or []
+
+        if not isinstance(data, list):
+            return None
+
+        for item in data:
+            if not isinstance(item, dict):
+                continue
+            item_id = str(item.get("id", "")).strip()
+            translation = str(item.get("translation", "")).strip()
+            if item_id and translation:
+                result[item_id] = translation
+
+        return result or None
 
 
 def contains_chinese(text: str) -> bool:

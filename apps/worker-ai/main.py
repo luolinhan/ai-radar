@@ -5,7 +5,6 @@ AI Worker - 负责翻译、分析、通知
 import os
 import time
 import logging
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta
 from uuid import uuid4
 
@@ -84,13 +83,68 @@ def build_translator() -> Translator:
         api_base_url=os.getenv("AI_API_BASE_URL"),
         api_key=os.getenv("AI_API_KEY"),
         model=os.getenv("AI_MODEL", "qwen3.5-plus"),
-        timeout_seconds=int(os.getenv("TRANSLATE_TIMEOUT_SECONDS", "40")),
+        timeout_seconds=int(os.getenv("TRANSLATE_TIMEOUT_SECONDS", "120")),
         max_retries=int(os.getenv("TRANSLATE_MAX_RETRIES", "1")),
     )
 
 
 def translate_enabled() -> bool:
     return parse_bool_env("TRANSLATE_ENABLED", True)
+
+
+def translation_batch_settings() -> tuple[int, int]:
+    max_items = int(os.getenv("TRANSLATE_BATCH_ITEM_LIMIT", "40"))
+    max_chars = int(os.getenv("TRANSLATE_BATCH_CHAR_LIMIT", "16000"))
+    return max(1, max_items), max(1000, max_chars)
+
+
+def split_translation_items(items: list[dict], max_items: int, max_chars: int) -> list[list[dict]]:
+    batches: list[list[dict]] = []
+    current_batch: list[dict] = []
+    current_chars = 0
+
+    for item in items:
+        text = str(item.get("text", "")).strip()
+        if not text:
+            continue
+
+        text_len = len(text)
+        should_split = (
+            current_batch
+            and (
+                len(current_batch) >= max_items
+                or current_chars + text_len > max_chars
+            )
+        )
+        if should_split:
+            batches.append(current_batch)
+            current_batch = []
+            current_chars = 0
+
+        current_batch.append(item)
+        current_chars += text_len
+
+    if current_batch:
+        batches.append(current_batch)
+
+    return batches
+
+
+def translate_items_in_batches(translator: Translator, items: list[dict]) -> dict[str, str]:
+    if not items:
+        return {}
+
+    max_items, max_chars = translation_batch_settings()
+    batches = split_translation_items(items, max_items=max_items, max_chars=max_chars)
+    translated_map: dict[str, str] = {}
+
+    for batch in batches:
+        batch_result = translator.translate_batch(batch)
+        if not batch_result:
+            continue
+        translated_map.update(batch_result)
+
+    return translated_map
 
 
 def compute_signal_score(event, signal_keywords: list[str]) -> int:
@@ -139,7 +193,6 @@ def process_untranslated():
     try:
         translator = build_translator()
         batch_size = int(os.getenv("TRANSLATE_BATCH_SIZE", "40"))
-        concurrency = int(os.getenv("TRANSLATE_CONCURRENCY", "2"))
         from models import Event
 
         # 获取未翻译的事件
@@ -177,42 +230,31 @@ def process_untranslated():
             event_map[event.event_id] = event
 
         if pending_jobs:
-            workers = max(1, min(concurrency, len(pending_jobs)))
-            logger.info("并发翻译启动: pending=%s, workers=%s", len(pending_jobs), workers)
-            with ThreadPoolExecutor(max_workers=workers) as executor:
-                future_map = {
-                    executor.submit(translator.translate, text): event_id
-                    for event_id, text in pending_jobs
-                }
+            logger.info("并发改为批量翻译: pending=%s", len(pending_jobs))
+            translated_map = translate_items_in_batches(
+                translator,
+                [{"id": str(event_id), "text": text} for event_id, text in pending_jobs],
+            )
 
-                for future in as_completed(future_map):
-                    event_id = future_map[future]
-                    event = event_map.get(event_id)
-                    if not event:
-                        failed_count += 1
-                        continue
+            for event_id, raw_text in pending_jobs:
+                event = event_map.get(event_id)
+                if not event:
+                    failed_count += 1
+                    continue
 
-                    raw_text = (event.content_raw or "").strip()
-                    try:
-                        translated = future.result()
-                    except Exception as e:
-                        failed_count += 1
-                        logger.error("翻译失败: %s, 错误: %s", event_id, e)
-                        continue
+                translated = (translated_map.get(str(event_id)) or "").strip()
+                if not translated:
+                    failed_count += 1
+                    logger.warning("翻译为空，跳过: %s", event_id)
+                    continue
 
-                    if not translated:
-                        failed_count += 1
-                        logger.warning("翻译为空，跳过: %s", event_id)
-                        continue
+                if translated == raw_text and not contains_chinese(translated):
+                    failed_count += 1
+                    logger.warning("翻译结果疑似无效（与原文一致），跳过: %s", event_id)
+                    continue
 
-                    translated = translated.strip()
-                    if translated == raw_text and not contains_chinese(translated):
-                        failed_count += 1
-                        logger.warning("翻译结果疑似无效（与原文一致），跳过: %s", event_id)
-                        continue
-
-                    event.content_zh = translated
-                    translated_count += 1
+                event.content_zh = translated
+                translated_count += 1
 
         db.commit()
         logger.info(
@@ -261,7 +303,6 @@ def send_alerts():
         lookback_window_start = now - timedelta(hours=lookback_hours)
 
         from models import Event, Alert
-        translator = None
         # 已发送/已跳过的事件不再重复处理
         processed_event_exists = db.query(Alert.id).filter(
             Alert.event_id == Event.event_id,
@@ -281,6 +322,37 @@ def send_alerts():
             key=lambda x: (x[0], x[1].published_at or datetime.min),
             reverse=True,
         )
+
+        if allow_on_demand_translation:
+            need_translation_items = []
+            event_lookup = {}
+            for _, event in ranked_events:
+                content_zh = (event.content_zh or "").strip()
+                content_raw = (event.content_raw or "").strip()
+                if content_zh or not content_raw:
+                    continue
+                if contains_chinese(content_raw):
+                    event.content_zh = content_raw
+                    continue
+
+                if len(content_raw) < 30:
+                    continue
+
+                event_id = str(event.event_id)
+                event_lookup[event_id] = event
+                need_translation_items.append({"id": event_id, "text": content_raw[:4000]})
+
+            if need_translation_items:
+                translated_map = translate_items_in_batches(
+                    build_translator(),
+                    need_translation_items,
+                )
+                for event_id, event in event_lookup.items():
+                    translated = (translated_map.get(event_id) or "").strip()
+                    if translated:
+                        event.content_zh = translated
+                db.commit()
+
         sent_count = 0
 
         for quality_score, event in ranked_events:
@@ -294,31 +366,19 @@ def send_alerts():
                 if not content_zh and content_raw:
                     if contains_chinese(content_raw):
                         content_zh = content_raw
-                    elif allow_on_demand_translation:
-                        if translator is None:
-                            translator = build_translator()
-                        translated = translator.translate(content_raw)
-                        if translated:
-                            translated = translated.strip()
-                            if translated != content_raw or contains_chinese(translated):
-                                content_zh = translated
-                        if not content_zh and require_translation:
-                            db.add(Alert(
-                                id=uuid4(),
-                                event_id=event.event_id,
-                                alert_level=event.alert_level,
-                                sent_at=now,
-                                channel="feishu",
-                                status="skipped",
-                                error_message="translation_required_but_unavailable",
-                            ))
-                            db.commit()
-                            logger.info(f"跳过未翻译告警: {event.event_id}")
-                            continue
-
-                    if content_zh:
-                        event.content_zh = content_zh
+                    elif require_translation:
+                        db.add(Alert(
+                            id=uuid4(),
+                            event_id=event.event_id,
+                            alert_level=event.alert_level,
+                            sent_at=now,
+                            channel="feishu",
+                            status="skipped",
+                            error_message="translation_required_but_unavailable",
+                        ))
                         db.commit()
+                        logger.info(f"跳过未翻译告警: {event.event_id}")
+                        continue
 
                 content_for_card = (content_zh or "").strip()
                 if not content_for_card and not require_translation:
