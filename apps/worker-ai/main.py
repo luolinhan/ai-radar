@@ -130,6 +130,33 @@ def split_translation_items(items: list[dict], max_items: int, max_chars: int) -
     return batches
 
 
+def translate_items_with_fallback(translator: Translator, items: list[dict]) -> dict[str, str]:
+    if not items:
+        return {}
+
+    if len(items) == 1:
+        single = items[0]
+        result = translator.translate_batch(items)
+        if result:
+            return result
+
+        text = str(single.get("text", "")).strip()
+        translated = translator.translate(text)
+        if translated:
+            return {str(single.get("id", "")).strip(): translated}
+        return {}
+
+    batch_result = translator.translate_batch(items)
+    if batch_result:
+        return batch_result
+
+    mid = len(items) // 2
+    left = translate_items_with_fallback(translator, items[:mid])
+    right = translate_items_with_fallback(translator, items[mid:])
+    left.update(right)
+    return left
+
+
 def translate_items_in_batches(translator: Translator, items: list[dict]) -> dict[str, str]:
     if not items:
         return {}
@@ -139,10 +166,7 @@ def translate_items_in_batches(translator: Translator, items: list[dict]) -> dic
     translated_map: dict[str, str] = {}
 
     for batch in batches:
-        batch_result = translator.translate_batch(batch)
-        if not batch_result:
-            continue
-        translated_map.update(batch_result)
+        translated_map.update(translate_items_with_fallback(translator, batch))
 
     return translated_map
 

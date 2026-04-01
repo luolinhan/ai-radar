@@ -200,6 +200,50 @@ class Translator:
 
         return None
 
+    def _sanitize_json_string_controls(self, content: str) -> str:
+        """
+        将 JSON 文本中字符串内部的真实控制字符转义。
+
+        这可以处理模型把多行 markdown 直接塞进 JSON 字符串的情况。
+        """
+        result = []
+        in_string = False
+        escaped = False
+
+        for ch in content:
+            if not in_string:
+                result.append(ch)
+                if ch == '"':
+                    in_string = True
+                continue
+
+            if escaped:
+                result.append(ch)
+                escaped = False
+                continue
+
+            if ch == "\\":
+                result.append(ch)
+                escaped = True
+                continue
+
+            if ch == '"':
+                result.append(ch)
+                in_string = False
+                continue
+
+            if ch == "\r" or ch == "\n":
+                result.append("\\n")
+                continue
+
+            if ord(ch) < 0x20:
+                result.append(f"\\u{ord(ch):04x}")
+                continue
+
+            result.append(ch)
+
+        return "".join(result)
+
     def _parse_batch_translation_response(self, content: str) -> Optional[dict[str, str]]:
         raw = (content or "").strip()
         if not raw:
@@ -213,14 +257,17 @@ class Translator:
         try:
             data = json.loads(raw)
         except Exception:
-            start = raw.find("[")
-            end = raw.rfind("]")
-            if start == -1 or end == -1 or end <= start:
-                return None
             try:
-                data = json.loads(raw[start : end + 1])
+                data = json.loads(self._sanitize_json_string_controls(raw))
             except Exception:
-                return None
+                start = raw.find("[")
+                end = raw.rfind("]")
+                if start == -1 or end == -1 or end <= start:
+                    return None
+                try:
+                    data = json.loads(self._sanitize_json_string_controls(raw[start : end + 1]))
+                except Exception:
+                    return None
 
         result: dict[str, str] = {}
         if isinstance(data, dict):
@@ -234,6 +281,7 @@ class Translator:
                 continue
             item_id = str(item.get("id", "")).strip()
             translation = str(item.get("translation", "")).strip()
+            translation = translation.replace("\r\n", "\n").replace("\r", "\n")
             if item_id and translation:
                 result[item_id] = translation
 
