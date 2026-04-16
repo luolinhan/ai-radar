@@ -109,6 +109,69 @@ class Translator:
 
         return None
 
+    def analyze(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        max_tokens: int = 300,
+        temperature: float = 0.3,
+    ) -> Optional[str]:
+        """
+        通用 LLM 分析调用（非翻译用途）。
+        """
+        logger.info("分析 API 调用: system_prompt=%d chars, user_prompt=%d chars, max_tokens=%d",
+                     len(system_prompt), len(user_prompt), max_tokens)
+        for attempt in range(self.max_retries + 1):
+            try:
+                with httpx.Client(timeout=self.timeout_seconds) as client:
+                    url = f"{self.api_base_url}/chat/completions"
+                    response = client.post(
+                        url,
+                        headers={
+                            "Authorization": f"Bearer {self.api_key}",
+                            "Content-Type": "application/json",
+                        },
+                        json={
+                            "model": self.model,
+                            "messages": [
+                                {"role": "system", "content": system_prompt},
+                                {"role": "user", "content": user_prompt},
+                            ],
+                            "enable_thinking": False,
+                            "temperature": temperature,
+                            "max_tokens": max_tokens,
+                        },
+                    )
+
+                    if response.status_code == 200:
+                        data = response.json()
+                        result = data["choices"][0]["message"]["content"]
+                        result = result.strip()
+                        if not result:
+                            logger.warning("分析结果为空")
+                            return None
+                        return result
+
+                    logger.error(
+                        "分析 API 错误: status=%s, attempt=%s/%s, body=%s",
+                        response.status_code,
+                        attempt + 1,
+                        self.max_retries + 1,
+                        response.text[:300],
+                    )
+            except Exception as e:
+                logger.error(
+                    "分析失败: attempt=%s/%s, error=%s",
+                    attempt + 1,
+                    self.max_retries + 1,
+                    e,
+                )
+
+            if attempt < self.max_retries:
+                time.sleep(min(2 ** attempt, 5))
+
+        return None
+
     def translate_batch(self, items: list[dict]) -> Optional[dict[str, str]]:
         """
         批量翻译内容到中文。

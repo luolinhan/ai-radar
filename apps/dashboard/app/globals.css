@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-deep: #05070c;
+  --bg-mid: #0b1220;
+  --panel: rgba(11, 18, 32, 0.74);
+  --panel-strong: rgba(10, 16, 28, 0.94);
+  --line: rgba(148, 163, 184, 0.16);
+  --line-strong: rgba(34, 211, 238, 0.28);
+  --text-primary: #e8eefc;
+  --text-muted: #91a4c1;
+}
+
+html {
+  min-height: 100%;
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--text-primary);
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(34, 211, 238, 0.16), transparent 28%),
+    radial-gradient(circle at 85% 10%, rgba(245, 158, 11, 0.14), transparent 22%),
+    radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.14), transparent 24%),
+    linear-gradient(180deg, var(--bg-deep) 0%, #060b13 46%, #0b1220 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(circle at top, rgba(0, 0, 0, 0.82), transparent 76%);
+  opacity: 0.18;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: auto -12rem -10rem auto;
+  height: 22rem;
+  width: 22rem;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.12), transparent 65%);
+  filter: blur(14px);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.22);
+  color: #f8fbff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.4);
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid rgba(15, 23, 42, 0.9);
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(34, 211, 238, 0.5), rgba(59, 130, 246, 0.5));
+}
