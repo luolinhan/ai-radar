@@ -443,7 +443,9 @@ def process_untranslated():
 
                 if translated == original_text and not contains_chinese(translated):
                     failed_count += 1
-                    logger.warning("翻译结果疑似无效，跳过: %s", event_id)
+                    # If the original text is a URL, mark it as failed but don't log warning
+                    if not original_text.startswith("http://") and not original_text.startswith("https://"):
+                        logger.warning("翻译结果疑似无效，跳过: %s", event_id)
                     continue
 
                 event.content_zh = translated
